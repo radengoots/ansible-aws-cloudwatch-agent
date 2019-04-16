@@ -1,0 +1,64 @@
+---
+
+- name: check if agent is already installed
+  stat:
+    path: /opt/aws/amazon-cloudwatch-agent
+  register: installed
+
+- debug: 
+    var: installed
+
+- block:
+
+    - name: add {{ aws_cwa_package }} key
+      apt_key:
+        state: present
+        url: "{{ aws_cwa_package_gpg }}"
+
+    - name: Download the {{ aws_cwa_package }}.deb file
+      get_url:
+        url: "{{ aws_cwa_package_url }}"
+        dest: "/tmp/{{ aws_cwa_package }}.deb"
+      changed_when: false
+
+    - name: Download the {{ aws_cwa_package }}.deb.sig file
+      get_url:
+        url: "{{ aws_cwa_package_signature }}"
+        dest: "/tmp/{{ aws_cwa_package }}.deb.sig"
+      changed_when: false
+
+    - name: Verify {{ aws_cwa_package }} package signature
+      shell: gpg --verify {{ aws_cwa_package }}.deb.sig {{ aws_cwa_package }}.deb
+      register: verified_sig
+      failed_when: "'BAD' in verified_sig.stderr"
+      changed_when: false
+      args:
+        executable: /bin/bash
+        chdir: /{{ aws_cwa_temp_path }}
+
+    - name: install {{ aws_cwa_package }}.deb
+      shell: "dpkg -i -E /{{ aws_cwa_temp_path }}/{{ aws_cwa_package }}.deb"
+      
+    - name: remove downloaded {{ aws_cwa_package }}.deb.sig
+      file:
+        path: "/{{ aws_cwa_temp_path }}/{{ aws_cwa_package }}.deb.sig"
+        state: absent
+      changed_when: false
+
+    - name: remove downloaded {{ aws_cwa_package }}.deb
+      file:
+        path: "/{{ aws_cwa_temp_path }}/{{ aws_cwa_package }}.deb"
+        state: absent
+      changed_when: false
+
+    - name: ensure ssm-agent service running and enabled on boot
+      service:
+        name: "{{ aws_cloudwatch_agent_service_name }}"
+        enabled: yes
+      state: started
+  
+  when: (installed.stat.exists != true)
+  become: yes
+  become_method: sudo
+  tags:
+    - aws-cloudwatch-agent
