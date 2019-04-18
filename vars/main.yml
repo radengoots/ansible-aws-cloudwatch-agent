@@ -1,8 +1,0 @@
----
-aws_cwa_package: amazon-cloudwatch-agent
-aws_cwa_package_gpg: https://s3.amazonaws.com/amazoncloudwatch-agent/assets/amazon-cloudwatch-agent.gpg
-aws_cwa_package_url: https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
-aws_cwa_package_signature: https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb.sig
-
-aws_cwa_temp_path: /tmp
-aws_cloudwatch_agent_service_name: amazon-cloudwatch-agent
