@@ -1,15 +1,21 @@
 ---
-
 - name: check if agent is already installed
   stat:
     path: /opt/aws/amazon-cloudwatch-agent
   register: installed
 
-- debug: 
-    var: installed
+- block:
+    - name: Remove existed cloudwatch-agent
+      apt:
+        name: amazon-cloudwatch-agent
+        state: absent
+
+  when: (installed.stat.exists)
+  become: yes
+  become_method: sudo
+
 
 - block:
-
     - name: add {{ aws_cwa_package }} key
       apt_key:
         state: present
@@ -28,7 +34,7 @@
       changed_when: false
 
     - name: Verify {{ aws_cwa_package }} package signature
-      shell: gpg --verify {{ aws_cwa_package }}.deb.sig {{ aws_cwa_package }}.deb
+      command: gpg --verify {{ aws_cwa_package }}.deb.sig {{ aws_cwa_package }}.deb
       register: verified_sig
       failed_when: "'BAD' in verified_sig.stderr"
       changed_when: false
@@ -37,8 +43,8 @@
         chdir: /{{ aws_cwa_temp_path }}
 
     - name: install {{ aws_cwa_package }}.deb
-      shell: "dpkg -i -E /{{ aws_cwa_temp_path }}/{{ aws_cwa_package }}.deb"
-      
+      command: "dpkg -i -E /{{ aws_cwa_temp_path }}/{{ aws_cwa_package }}.deb"
+
     - name: remove downloaded {{ aws_cwa_package }}.deb.sig
       file:
         path: "/{{ aws_cwa_temp_path }}/{{ aws_cwa_package }}.deb.sig"
@@ -55,9 +61,9 @@
       service:
         name: "{{ aws_cloudwatch_agent_service_name }}"
         enabled: yes
-      state: started
-  
-  when: (installed.stat.exists != true)
+      notify: 
+        - restart cloudwatch-agent
+
   become: yes
   become_method: sudo
   tags:
