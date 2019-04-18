@@ -10,7 +10,6 @@ No special pre-requisites.
 
 ### Defaults ###
 
-
     - name: aws_cwa_package
       desc: AWS cloudwatch agent package name
       value: amazon-cloudwatch-agent
@@ -30,9 +29,7 @@ No special pre-requisites.
     - name: aws_cwa_temp_path
       desc: AWS cloudwatch agent temporary destination path
       value: /tmp
-
-### Vars ###
-
+    
     - name: aws_cloudwatch_agent_service_name
       desc: aws-cloudwatch-agent service name
       value: amazon-cloudwatch-agent

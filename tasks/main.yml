@@ -14,7 +14,6 @@
   become: yes
   become_method: sudo
 
-
 - block:
     - name: add {{ aws_cwa_package }} key
       apt_key:
