@@ -1,5 +1,5 @@
 ---
-- name: restart cloudwatch-agent
+- name: restart amazon-cloudwatch-agent
   service:
-    name: amazon-cloudwatch-agent
-    state: restarted
+    name: "amazon-cloudwatch-agent"
+    state: "restarted"

@@ -6,3 +6,4 @@ aws_cwa_package_signature: https://s3.amazonaws.com/amazoncloudwatch-agent/ubunt
 
 aws_cwa_temp_path: /tmp
 aws_cloudwatch_agent_service_name: amazon-cloudwatch-agent
+aws_cloudwatch_agent_dest: /opt/aws/amazon-cloudwatch-agent
