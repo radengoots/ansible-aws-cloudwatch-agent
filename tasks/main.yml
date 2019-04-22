@@ -1,13 +1,13 @@
 ---
 - name: check if agent is already installed
   stat:
-    path: " {{ aws_cloudwatch_agent_dest }} "
+    path: "{{ aws_cloudwatch_agent_dest }}"
   register: installed
 
 - block:
     - name: Remove existed cloudwatch-agent
       apt:
-        name: " {{ aws_cloudwatch_agent_service_name }} "
+        name: "{{ aws_cloudwatch_agent_service_name }}"
         state: absent
 
   when: (installed.stat.exists)
@@ -19,12 +19,6 @@
       apt_key:
         state: present
         url: "{{ aws_cwa_package_gpg }}"
-
-    - name: Download the {{ aws_cwa_package }}.deb file
-      get_url:
-        url: "{{ aws_cwa_package_url }}"
-        dest: "/tmp/{{ aws_cwa_package }}.deb"
-      changed_when: false
 
     - name: Download the {{ aws_cwa_package }}.deb.sig file
       get_url:
@@ -41,10 +35,12 @@
         executable: /bin/bash
         chdir: /{{ aws_cwa_temp_path }}
 
-    - name: install {{ aws_cwa_package }}.deb
+    - name: install cloudwatch-agent
       apt:
-        deb: "/{{ aws_cwa_temp_path }}/{{ aws_cwa_package }}.deb"
+        deb: "{{ aws_cloudwatch_agent_url }}"
         state: present
+        update_cache: yes
+        cache_valid_time: "{{ apt_cache_valid_time | default(omit) }}"
 
     - name: Symlink amazon-cloudwatch-agent command
       file:
@@ -63,4 +59,4 @@
   become_method: sudo
   tags:
     - aws-cloudwatch-agent
-    
+  
