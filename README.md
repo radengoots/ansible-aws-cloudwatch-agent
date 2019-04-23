@@ -33,6 +33,10 @@ No special pre-requisites.
     - name: aws_cloudwatch_agent_service_name
       desc: aws-cloudwatch-agent service name
       value: amazon-cloudwatch-agent
+    
+    - name: aws_cloudwatch_agent_dest
+      desc: aws-cloudwatch-agent installation destination path
+      value: /opt/aws/amazon-cloudwatch-agent
 
 ## Dependencies ##
 
