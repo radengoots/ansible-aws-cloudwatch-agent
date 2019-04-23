@@ -4,12 +4,4 @@
   become: yes
   roles:
     - ansible-cloudwatch-agent
-  post_tasks:
-    - name: Clean up downloaded files
-      file:
-        path: "{{ item }}"
-        state: absent
-      changed_when: false
-      with_items:
-        - "/{{ aws_cwa_temp_path }}/{{ aws_cwa_package }}.deb.sig"
-        - "/{{ aws_cwa_temp_path }}/{{ aws_cwa_package }}.deb"
+

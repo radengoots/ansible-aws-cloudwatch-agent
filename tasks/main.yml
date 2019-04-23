@@ -37,7 +37,7 @@
 
     - name: install cloudwatch-agent
       apt:
-        deb: "{{ aws_cloudwatch_agent_url }}"
+        deb: "{{ aws_cwa_package_url }}"
         state: present
         update_cache: yes
         cache_valid_time: "{{ apt_cache_valid_time | default(omit) }}"
@@ -54,6 +54,12 @@
         enabled: yes
       notify: 
         - restart cloudwatch-agent
+
+    - name: Clean up downloaded files
+      file:
+        path: "/{{ aws_cwa_temp_path }}/{{ aws_cwa_package }}.deb.sig"
+        state: absent
+      changed_when: false
 
   become: yes
   become_method: sudo
