@@ -19,22 +19,7 @@
       apt_key:
         state: present
         url: "{{ aws_cwa_package_gpg }}"
-
-    - name: Download the {{ aws_cwa_package }}.deb.sig file
-      get_url:
-        url: "{{ aws_cwa_package_signature }}"
-        dest: "/tmp/{{ aws_cwa_package }}.deb.sig"
-      changed_when: false
-
-    - name: Verify {{ aws_cwa_package }} package signature
-      command: gpg --verify {{ aws_cwa_package }}.deb.sig
-      register: verified_sig
-      failed_when: "'BAD' in verified_sig.stderr"
-      changed_when: false
-      args:
-        executable: /bin/bash
-        chdir: /{{ aws_cwa_temp_path }}
-
+        
     - name: install cloudwatch-agent
       apt:
         deb: "{{ aws_cwa_package_url }}"
@@ -54,12 +39,6 @@
         enabled: yes
       notify: 
         - restart cloudwatch-agent
-
-    - name: Clean up downloaded files
-      file:
-        path: "/{{ aws_cwa_temp_path }}/{{ aws_cwa_package }}.deb.sig"
-        state: absent
-      changed_when: false
 
   become: yes
   become_method: sudo
