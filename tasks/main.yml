@@ -38,7 +38,7 @@
         name: "{{ aws_cwa_service_name }}"
         enabled: yes
       notify: 
-        - restart cloudwatch-agent
+        - restart amazon-cloudwatch-agent
 
   become: yes
   become_method: sudo
