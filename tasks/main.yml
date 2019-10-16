@@ -33,6 +33,12 @@
         dest: "/usr/bin/{{ aws_cwa_service_name }}"
         state: link
 
+    - name: "Add default metric config file then restart the agent"
+      template:
+        dest: "{{ aws_cwa_dest_path }}/etc/cwa_metrics.json"
+        src: templates/cwa_metrics.json.j2
+        mode: "0644"
+
     - name: ensure cloudwatch-agent service running and enabled on boot
       service:
         name: "{{ aws_cwa_service_name }}"
@@ -40,6 +46,7 @@
       notify: 
         - restart amazon-cloudwatch-agent
 
+    - name:
   become: yes
   become_method: sudo
   tags:

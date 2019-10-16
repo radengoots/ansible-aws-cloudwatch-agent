@@ -3,3 +3,4 @@ aws_cwa_service_name: amazon-cloudwatch-agent
 aws_cwa_package_gpg: https://s3.amazonaws.com/amazoncloudwatch-agent/assets/amazon-cloudwatch-agent.gpg
 aws_cwa_package_url: https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
 aws_cwa_dest_path: /opt/aws/amazon-cloudwatch-agent
+aws_cwa_logfile_path: /opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log
