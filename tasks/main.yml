@@ -45,8 +45,7 @@
         enabled: yes
       notify: 
         - restart amazon-cloudwatch-agent
-
-    - name:
+        
   become: yes
   become_method: sudo
   tags:
