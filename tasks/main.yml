@@ -38,14 +38,14 @@
         dest: "{{ aws_cwa_dest_path }}/etc/cwa_metrics.json"
         src: templates/cwa_metrics.json.j2
         mode: "0644"
+      notify: 
+        - restart amazon-cwa
 
-    - name: ensure cloudwatch-agent service running and enabled on boot
+    - name: ensure cloudwatch-agent service enabled on boot
       service:
         name: "{{ aws_cwa_service_name }}"
         enabled: yes
-      notify: 
-        - restart amazon-cloudwatch-agent
-        
+      
   become: yes
   become_method: sudo
   tags:
