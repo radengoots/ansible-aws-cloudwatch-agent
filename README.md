@@ -26,6 +26,10 @@ No special pre-requisites.
       desc: aws-cloudwatch-agent installation destination path
       value: /opt/aws/amazon-cloudwatch-agent
 
+    - name: aws_cwa_logfile_path
+      desc: aws-cloudwatch-agent logfile path
+      value: /opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log
+
 ## Dependencies ##
 
 None
